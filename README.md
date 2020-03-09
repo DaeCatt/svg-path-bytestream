@@ -19,50 +19,6 @@ dense integer representation (eg uint8 = 1 byte per number). This specification
 does not include a way to represent such scale factors, so that information
 would have to be provided out of band.
 
-## Usage of Included Node-Based Tools
-
-Encoder:
-
-```
-node encode.js [OPTIONS] PATH
-Outputs to stdout.
-
-Options:
-	-f n,          Factor to multiply every number
-	--factor n,    in the input string path by.
-	--factor=n
-
-	-e n,          Permissible error. Eg. a value
-	--error n,     of 0.5 would let the encoder
-	--error=n      round to nearest half.
-
-	-              Use stdin as input.
-```
-
-Decoder:
-
-```
-node decode.js [OPTIONS] PATH
-Outputs to stdout.
-
-Options:
-	-f n,          Factor to divide every number
-	--factor n,    in the input byte stream by.
-	--factor=n
-
-	-              Use stdin as input.
-```
-
-SVGs are often "optimized" to 3 decimals of precision, as such setting a factor
-of `1000` (= 1e3) often provides significant improvements in output size without
-losing any accuracy.
-
-Roundtrip:
-
-```
-node encode.js -f 1e3 pathd.txt >pathd.bin && node decode.js -f 1e3 pathd.bin
-```
-
 ## Spec
 
 ```
@@ -141,3 +97,52 @@ Encoding: 3 bits
 	|  111  |  float64 |            8 |
 	+-------+----------+--------------+
 ```
+
+## Usage of Included Node-Based Tools
+
+Encoder:
+
+```
+node encode.js [OPTIONS] PATH
+Outputs to stdout.
+
+Options:
+	-f n,          Factor to multiply every number
+	--factor n,    in the input string path by.
+	--factor=n
+
+	-e n,          Permissible error. Eg. a value
+	--error n,     of 0.5 would let the encoder
+	--error=n      round to nearest half.
+
+	-              Use stdin as input.
+```
+
+Decoder:
+
+```
+node decode.js [OPTIONS] PATH
+Outputs to stdout.
+
+Options:
+	-f n,          Factor to divide every number
+	--factor n,    in the input byte stream by.
+	--factor=n
+
+	-              Use stdin as input.
+```
+
+SVGs are often "optimized" to 3 decimals of precision, as such setting a factor
+of `1000` (= 1e3) often provides significant improvements in output size without
+losing any accuracy.
+
+Roundtrip:
+
+```
+node encode.js -f 1e3 pathd.txt >pathd.bin && node decode.js -f 1e3 pathd.bin
+```
+
+## Todo
+
+-   Convert lib/encode.js and lib/decode.js into proper duplex streams.
+-   DRY the node cli tools.
